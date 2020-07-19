@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //value: "text content initial, if any",
                 key: keyEditor,
                 height: 400,
+                getImageUrl: ()=>sendImageUrl(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -73,9 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.blue,
                       onPressed: () async {
                         final txt = await keyEditor.currentState.getText();
-                        setState(() {
-                          result = txt;
-                        });
+                        print(txt);
                       },
                       child: Text("Submit", style: TextStyle(color: Colors.white),),
                     ),
@@ -92,5 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  Future<String> sendImageUrl() async {
+    await Future.delayed(Duration(seconds: 5));
+    return "https://avatars0.githubusercontent.com/u/24323581?s=460&u=243b3e74976f8274de7237356da8dcd2d2a14244&v=4";
   }
 }

@@ -27,6 +27,7 @@ class HtmlEditor extends StatefulWidget {
   final String widthImage;
   final bool showBottomToolbar;
   final String hint;
+  final Function getImageUrl;
 
   HtmlEditor(
       {Key key,
@@ -36,7 +37,7 @@ class HtmlEditor extends StatefulWidget {
       this.useBottomSheet = true,
       this.widthImage = "100%",
       this.showBottomToolbar = true,
-      this.hint})
+      this.hint, this.getImageUrl})
       : super(key: key);
 
   @override
@@ -156,7 +157,7 @@ class HtmlEditorState extends State<HtmlEditor> {
                     children: <Widget>[
                       widgetIcon(Icons.image, "Image", onKlik: () {
                         widget.useBottomSheet
-                            ? bottomSheetPickImage(context)
+                            ? bottomSheetPickImage(context, widget.getImageUrl)
                             : dialogPickImage(context);
                       }),
                       widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
@@ -310,7 +311,7 @@ class HtmlEditorState extends State<HtmlEditor> {
         });
   }
 
-  bottomSheetPickImage(context) {
+  bottomSheetPickImage(context, Function getImageUrl) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -324,11 +325,9 @@ class HtmlEditorState extends State<HtmlEditor> {
               height: 140,
               width: double.infinity,
               child: PickImage(callbackFile: (file) async {
-                String filename = p.basename(file.path);
-                List<int> imageBytes = await file.readAsBytes();
+                String imageUrl = await getImageUrl();
                 String base64Image = "<img width=\"${widget.widthImage}\" "
-                    "src=\"data:image/png;base64, "
-                    "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
+                    "src=\"$imageUrl\">";
                 String txt =
                     "\$('.note-editable').append( '" + base64Image + "');";
                 _controller.evaluateJavascript(txt);
