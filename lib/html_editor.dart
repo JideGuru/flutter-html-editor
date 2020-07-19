@@ -158,7 +158,7 @@ class HtmlEditorState extends State<HtmlEditor> {
                       widgetIcon(Icons.image, "Image", onKlik: () {
                         widget.useBottomSheet
                             ? bottomSheetPickImage(context, widget.getImageUrl)
-                            : dialogPickImage(context);
+                            : dialogPickImage(context, widget.getImageUrl);
                       }),
                       widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
                         String data = await getText();
@@ -278,7 +278,7 @@ class HtmlEditorState extends State<HtmlEditor> {
     );
   }
 
-  dialogPickImage(BuildContext context) {
+  dialogPickImage(BuildContext context, Function(File image) getImageUrl) {
     return showDialog(
         context: context,
         barrierDismissible: true,
@@ -296,12 +296,9 @@ class HtmlEditorState extends State<HtmlEditor> {
               child: PickImage(
                   color: Colors.black45,
                   callbackFile: (file) async {
-                    String filename = p.basename(file.path);
-                    List<int> imageBytes = await file.readAsBytes();
-                    String base64Image =
-                        "<img width=\"${widget.widthImage}\" src=\"data:image/png;base64, "
-                        "${base64Encode(imageBytes)}\" data-filename=\"$filename\">";
-
+                    String imageUrl = await getImageUrl(file);
+                    String base64Image = "<img width=\"${widget.widthImage}\" "
+                        "src=\"$imageUrl\">";
                     String txt =
                         "\$('.note-editable').append( '" + base64Image + "');";
                     _controller.evaluateJavascript(txt);
