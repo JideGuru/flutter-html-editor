@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:html_editor/html_editor.dart';
 
@@ -53,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //value: "text content initial, if any",
                 key: keyEditor,
                 height: 400,
-                getImageUrl: ()=>sendImageUrl(),
+                getImageUrl: (image)=>sendImageUrl(image),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -93,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<String> sendImageUrl() async {
+  Future<String> sendImageUrl(File image) async {
+    print(image.path);
     await Future.delayed(Duration(seconds: 5));
     return "https://avatars0.githubusercontent.com/u/24323581?s=460&u=243b3e74976f8274de7237356da8dcd2d2a14244&v=4";
   }

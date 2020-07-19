@@ -27,7 +27,7 @@ class HtmlEditor extends StatefulWidget {
   final String widthImage;
   final bool showBottomToolbar;
   final String hint;
-  final Function getImageUrl;
+  final Function(File image) getImageUrl;
 
   HtmlEditor(
       {Key key,
@@ -311,7 +311,7 @@ class HtmlEditorState extends State<HtmlEditor> {
         });
   }
 
-  bottomSheetPickImage(context, Function getImageUrl) {
+  bottomSheetPickImage(context, Function(File image) getImageUrl) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -325,7 +325,7 @@ class HtmlEditorState extends State<HtmlEditor> {
               height: 140,
               width: double.infinity,
               child: PickImage(callbackFile: (file) async {
-                String imageUrl = await getImageUrl();
+                String imageUrl = await getImageUrl(file);
                 String base64Image = "<img width=\"${widget.widthImage}\" "
                     "src=\"$imageUrl\">";
                 String txt =
