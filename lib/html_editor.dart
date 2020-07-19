@@ -260,7 +260,7 @@ class HtmlEditorState extends State<HtmlEditor> {
         children: <Widget>[
           Icon(
             icon,
-            color: Colors.black38,
+            color: Theme.of(context).textTheme.headline6.color,
             size: 20,
           ),
           Padding(
@@ -268,7 +268,7 @@ class HtmlEditorState extends State<HtmlEditor> {
             child: Text(
               title,
               style: TextStyle(
-                  color: Colors.black54,
+                  color: Theme.of(context).textTheme.headline6.color,
                   fontSize: 16,
                   fontWeight: FontWeight.w400),
             ),
