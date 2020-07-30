@@ -1,6 +1,5 @@
 library html_editor;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor/local_server.dart';
 import 'package:html_editor/pick_image.dart';
-import 'package:path/path.dart' as p;
 import 'package:webview_flutter/webview_flutter.dart';
 
 /*
@@ -37,7 +35,8 @@ class HtmlEditor extends StatefulWidget {
       this.useBottomSheet = true,
       this.widthImage = "100%",
       this.showBottomToolbar = true,
-      this.hint, this.getImageUrl})
+      this.hint,
+      this.getImageUrl})
       : super(key: key);
 
   @override
@@ -87,7 +86,7 @@ class HtmlEditorState extends State<HtmlEditor> {
   }
 
   _loadHtmlFromAssets() async {
-    final filePath = 'packages/html_editor/summernote/summernote.html';
+    final filePath = 'packages/html_editor/editor/editor.html';
     _controller.loadUrl("http://localhost:$port/$filePath");
   }
 
@@ -113,7 +112,7 @@ class HtmlEditorState extends State<HtmlEditor> {
 
                 if (Platform.isAndroid) {
                   final filename =
-                      'packages/html_editor/summernote/summernote.html';
+                      'packages/html_editor/editor/editor.html';
                   _controller.loadUrl(
                       "file:///android_asset/flutter_assets/" + filename);
                 } else {
@@ -160,10 +159,10 @@ class HtmlEditorState extends State<HtmlEditor> {
                             ? bottomSheetPickImage(context, widget.getImageUrl)
                             : dialogPickImage(context, widget.getImageUrl);
                       }),
-                      widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
-                        String data = await getText();
-                        Clipboard.setData(new ClipboardData(text: data));
-                      }),
+//                      widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
+//                        String data = await getText();
+//                        Clipboard.setData(new ClipboardData(text: data));
+//                      }),
                       widgetIcon(Icons.content_paste, "Paste",
                           onKlik: () async {
                         ClipboardData data =
@@ -280,57 +279,64 @@ class HtmlEditorState extends State<HtmlEditor> {
 
   dialogPickImage(BuildContext context, Function(File image) getImageUrl) {
     return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            content: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              padding: const EdgeInsets.all(12),
-              height: 120,
-              child: PickImage(
-                  color: Colors.black45,
-                  callbackFile: (file) async {
-                    String imageUrl = await getImageUrl(file);
-                    String base64Image = "<img width=\"${widget.widthImage}\" "
-                        "src=\"$imageUrl\">";
-                    String txt =
-                        "\$('.note-editable').append( '" + base64Image + "');";
-                    _controller.evaluateJavascript(txt);
-                  }),
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          content: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-          );
-        });
+            padding: const EdgeInsets.all(12),
+            height: 120,
+            child: PickImage(
+              color: Colors.black45,
+              callbackFile: (file) async {
+                String imageUrl = await getImageUrl(file);
+                if (imageUrl != null) {
+                  String base64Image = "<img width=\"${widget.widthImage}\" "
+                      "src=\"$imageUrl\">";
+                  String txt =
+                      "\$('.note-editable').append( '" + base64Image + "');";
+                  _controller.evaluateJavascript(txt);
+                }
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   bottomSheetPickImage(context, Function(File image) getImageUrl) {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        backgroundColor: Colors.white,
-        context: context,
-        builder: (BuildContext bc) {
-          return StatefulBuilder(builder: (BuildContext context, setStatex) {
-            return SingleChildScrollView(
-                child: Container(
-              height: 140,
-              width: double.infinity,
-              child: PickImage(callbackFile: (file) async {
-                String imageUrl = await getImageUrl(file);
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext bc) {
+        return StatefulBuilder(builder: (BuildContext context, setStatex) {
+          return SingleChildScrollView(
+              child: Container(
+            height: 140,
+            width: double.infinity,
+            child: PickImage(callbackFile: (file) async {
+              String imageUrl = await getImageUrl(file);
+              if(imageUrl != null){
                 String base64Image = "<img width=\"${widget.widthImage}\" "
                     "src=\"$imageUrl\">";
                 String txt =
                     "\$('.note-editable').append( '" + base64Image + "');";
                 _controller.evaluateJavascript(txt);
-              }),
-            ));
-          });
+              }
+            }),
+          ));
         });
+      },
+    );
   }
 }

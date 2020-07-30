@@ -26,15 +26,15 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
   assets:
-    - packages/html_editor/summernote/summernote.html
-    - packages/html_editor/summernote/summernote-lite.min.css
-    - packages/html_editor/summernote/summernote-lite.min.js
-    - packages/html_editor/summernote/summernote-lite.min.js.map
-    - packages/html_editor/summernote/jquery-3.4.1.slim.min.js
-    - packages/html_editor/summernote/font/summernote.eot
-    - packages/html_editor/summernote/font/summernote.ttf
-    - packages/html_editor/summernote/font/summernote.woff
-    - packages/html_editor/summernote/font/summernote.woff2
+    - packages/html_editor/editor/editor.html
+    - packages/html_editor/editor/summernote-lite.min.css
+    - packages/html_editor/editor/summernote-lite.min.js
+    - packages/html_editor/editor/summernote-lite.min.js.map
+    - packages/html_editor/editor/jquery-3.4.1.slim.min.js
+    - packages/html_editor/editor/font/summernote.eot
+    - packages/html_editor/editor/font/summernote.ttf
+    - packages/html_editor/editor/font/summernote.woff
+    - packages/html_editor/editor/font/summernote.woff2
   #  - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see

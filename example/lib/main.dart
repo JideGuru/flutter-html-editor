@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: keyEditor,
                 height: 400,
                 getImageUrl: (image)=>sendImageUrl(image),
+                useBottomSheet: false,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
