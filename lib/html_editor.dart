@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:html_editor/local_server.dart';
 import 'package:html_editor/pick_image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 /*
@@ -26,6 +26,7 @@ class HtmlEditor extends StatefulWidget {
   final bool showBottomToolbar;
   final String hint;
   final Function(File image) getImageUrl;
+  final Function(File image) getVideoUrl;
 
   HtmlEditor(
       {Key key,
@@ -36,7 +37,8 @@ class HtmlEditor extends StatefulWidget {
       this.widthImage = "100%",
       this.showBottomToolbar = true,
       this.hint,
-      this.getImageUrl})
+      this.getImageUrl,
+      this.getVideoUrl,})
       : super(key: key);
 
   @override
@@ -161,28 +163,32 @@ class HtmlEditorState extends State<HtmlEditor> {
                                 ? bottomSheetPickImage(context, widget.getImageUrl)
                                 : dialogPickImage(context, widget.getImageUrl);
                           }),
+
+                          widgetIcon(Icons.videocam, "Video", onKlik: () {
+                            pickVideo();
+                          }),
 //                      widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
 //                        String data = await getText();
 //                        Clipboard.setData(new ClipboardData(text: data));
 //                      }),
-                          widgetIcon(Icons.content_paste, "Paste",
-                              onKlik: () async {
-                            ClipboardData data =
-                                await Clipboard.getData(Clipboard.kTextPlain);
-
-                            String txtIsi = data.text
-                                .replaceAll("'", '\\"')
-                                .replaceAll('"', '\\"')
-                                .replaceAll("[", "\\[")
-                                .replaceAll("]", "\\]")
-                                .replaceAll("\n", "<br/>")
-                                .replaceAll("\n\n", "<br/>")
-                                .replaceAll("\r", " ")
-                                .replaceAll('\r\n', " ");
-                            String txt =
-                                "\$('.note-editable').append( '" + txtIsi + "');";
-                            _controller.evaluateJavascript(txt);
-                          }),
+//                          widgetIcon(Icons.content_paste, "Paste",
+//                              onKlik: () async {
+//                            ClipboardData data =
+//                                await Clipboard.getData(Clipboard.kTextPlain);
+//
+//                            String txtIsi = data.text
+//                                .replaceAll("'", '\\"')
+//                                .replaceAll('"', '\\"')
+//                                .replaceAll("[", "\\[")
+//                                .replaceAll("]", "\\]")
+//                                .replaceAll("\n", "<br/>")
+//                                .replaceAll("\n\n", "<br/>")
+//                                .replaceAll("\r", " ")
+//                                .replaceAll('\r\n', " ");
+//                            String txt =
+//                                "\$('.note-editable').append( '" + txtIsi + "');";
+//                            _controller.evaluateJavascript(txt);
+//                          }),
                         ],
                       ),
                     ),
@@ -313,6 +319,23 @@ class HtmlEditorState extends State<HtmlEditor> {
         );
       },
     );
+  }
+
+  Future pickVideo() async {
+    var image = await ImagePicker.pickVideo(
+      source: ImageSource.gallery,
+    );
+
+    if (image != null) {
+      String videoUrl = await widget.getVideoUrl(image);
+      if(videoUrl != null){
+        String videoHtml = "<video width=\"${widget.widthImage}\" controls> "
+            "<source src=\"$videoUrl\"> </video>";
+        String txt =
+            "\$('.note-editable').append( '" + videoHtml + "');";
+        _controller.evaluateJavascript(txt);
+      }
+    }
   }
 
   bottomSheetPickImage(context, Function(File image) getImageUrl) {

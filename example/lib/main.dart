@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: keyEditor,
                 height: 400,
                 getImageUrl: (image)=>sendImageUrl(image),
+                getVideoUrl: (video)=>sendVideoUrl(video),
                 useBottomSheet: false,
               ),
               Padding(
@@ -100,5 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
     print(image.path);
     await Future.delayed(Duration(seconds: 5));
     return "https://avatars0.githubusercontent.com/u/24323581?s=460&u=243b3e74976f8274de7237356da8dcd2d2a14244&v=4";
+  }
+
+  Future<String> sendVideoUrl(File video) async {
+    print(video.path);
+    await Future.delayed(Duration(seconds: 5));
+    return "http://techslides.com/demos/sample-videos/small.mp4";
   }
 }
