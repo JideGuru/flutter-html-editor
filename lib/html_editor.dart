@@ -27,6 +27,8 @@ class HtmlEditor extends StatefulWidget {
   final String hint;
   final Function(File image) getImageUrl;
   final Function(File image) getVideoUrl;
+  final Function videoDisabled;
+  final bool isVideoDisabled;
 
   HtmlEditor(
       {Key key,
@@ -38,7 +40,8 @@ class HtmlEditor extends StatefulWidget {
       this.showBottomToolbar = true,
       this.hint,
       this.getImageUrl,
-      this.getVideoUrl,})
+      this.getVideoUrl,
+      this.videoDisabled, this.isVideoDisabled})
       : super(key: key);
 
   @override
@@ -165,7 +168,11 @@ class HtmlEditorState extends State<HtmlEditor> {
                           }),
 
                           widgetIcon(Icons.videocam, "Video", onKlik: () {
-                            pickVideo();
+                            if (!widget.isVideoDisabled) {
+                              pickVideo();
+                            } else {
+                              widget.videoDisabled();
+                            }
                           }),
 //                      widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
 //                        String data = await getText();

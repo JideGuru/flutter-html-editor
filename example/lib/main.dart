@@ -53,6 +53,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 getImageUrl: (image)=>sendImageUrl(image),
                 getVideoUrl: (video)=>sendVideoUrl(video),
                 useBottomSheet: false,
+                videoDisabled: (){print('PRO Feature');},
+                isVideoDisabled: true,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
