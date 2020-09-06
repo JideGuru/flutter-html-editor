@@ -148,42 +148,46 @@ class HtmlEditorState extends State<HtmlEditor> {
                   height: 1,
                 ),
           widget.showBottomToolbar
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                      left: 4.0, right: 4, bottom: 8, top: 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      widgetIcon(Icons.image, "Image", onKlik: () {
-                        widget.useBottomSheet
-                            ? bottomSheetPickImage(context, widget.getImageUrl)
-                            : dialogPickImage(context, widget.getImageUrl);
-                      }),
+              ? BottomAppBar(
+                child: Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 4.0, right: 4, bottom: 0.0, top: 5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          widgetIcon(Icons.image, "Image", onKlik: () {
+                            widget.useBottomSheet
+                                ? bottomSheetPickImage(context, widget.getImageUrl)
+                                : dialogPickImage(context, widget.getImageUrl);
+                          }),
 //                      widgetIcon(Icons.content_copy, "Copy", onKlik: () async {
 //                        String data = await getText();
 //                        Clipboard.setData(new ClipboardData(text: data));
 //                      }),
-                      widgetIcon(Icons.content_paste, "Paste",
-                          onKlik: () async {
-                        ClipboardData data =
-                            await Clipboard.getData(Clipboard.kTextPlain);
+                          widgetIcon(Icons.content_paste, "Paste",
+                              onKlik: () async {
+                            ClipboardData data =
+                                await Clipboard.getData(Clipboard.kTextPlain);
 
-                        String txtIsi = data.text
-                            .replaceAll("'", '\\"')
-                            .replaceAll('"', '\\"')
-                            .replaceAll("[", "\\[")
-                            .replaceAll("]", "\\]")
-                            .replaceAll("\n", "<br/>")
-                            .replaceAll("\n\n", "<br/>")
-                            .replaceAll("\r", " ")
-                            .replaceAll('\r\n', " ");
-                        String txt =
-                            "\$('.note-editable').append( '" + txtIsi + "');";
-                        _controller.evaluateJavascript(txt);
-                      }),
-                    ],
-                  ),
-                )
+                            String txtIsi = data.text
+                                .replaceAll("'", '\\"')
+                                .replaceAll('"', '\\"')
+                                .replaceAll("[", "\\[")
+                                .replaceAll("]", "\\]")
+                                .replaceAll("\n", "<br/>")
+                                .replaceAll("\n\n", "<br/>")
+                                .replaceAll("\r", " ")
+                                .replaceAll('\r\n', " ");
+                            String txt =
+                                "\$('.note-editable').append( '" + txtIsi + "');";
+                            _controller.evaluateJavascript(txt);
+                          }),
+                        ],
+                      ),
+                    ),
+                ),
+              )
               : Container(
                   height: 1,
                 )
@@ -251,8 +255,8 @@ class HtmlEditorState extends State<HtmlEditor> {
   }
 
   Widget widgetIcon(IconData icon, String title, {OnClik onKlik}) {
-    return InkWell(
-      onTap: () {
+    return FlatButton(
+      onPressed: () {
         onKlik();
       },
       child: Row(
