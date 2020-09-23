@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               HtmlEditor(
-                hint: "Your text here...",
+                hint: "Tap to compose...",
                 //value: "text content initial, if any",
                 key: keyEditor,
                 height: 400,

@@ -227,8 +227,10 @@ class HtmlEditorState extends State<HtmlEditor> {
   }
 
   Future<String> getText() async {
-    await _controller.evaluateJavascript(
-        "GetTextSummernote.postMessage(document.getElementsByClassName('note-editable')[0].innerHTML);");
+    try {
+      await _controller.evaluateJavascript(
+          "GetTextSummernote.postMessage(document.getElementsByClassName('note-editable')[0].innerHTML);");
+    } catch (e) {}
     return text;
   }
 
@@ -246,12 +248,16 @@ class HtmlEditorState extends State<HtmlEditor> {
         "document.getElementsByClassName('note-editable')[0].innerHTML = '" +
             txtIsi +
             "';";
-    _controller.evaluateJavascript(txt);
+    try {
+      _controller.evaluateJavascript(txt);
+    } catch (e) {}
   }
 
   setFullContainer() {
-    _controller.evaluateJavascript(
-        '\$("#summernote").summernote("fullscreen.toggle");');
+    try {
+      _controller.evaluateJavascript(
+          '\$("#summernote").summernote("fullscreen.toggle");');
+    } catch (e) {}
   }
 
   setFocus() {
@@ -264,7 +270,9 @@ class HtmlEditorState extends State<HtmlEditor> {
 
   setHint(String text) {
     String hint = '\$(".note-placeholder").html("$text");';
-    _controller.evaluateJavascript(hint);
+    try {
+      _controller.evaluateJavascript(hint);
+    } catch (e) {}
   }
 
   Widget widgetIcon(IconData icon, String title, {OnClik onKlik}) {
