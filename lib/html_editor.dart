@@ -41,7 +41,8 @@ class HtmlEditor extends StatefulWidget {
       this.hint,
       this.getImageUrl,
       this.getVideoUrl,
-      this.videoDisabled, this.isVideoDisabled})
+      this.videoDisabled,
+      this.isVideoDisabled})
       : super(key: key);
 
   @override
@@ -116,8 +117,7 @@ class HtmlEditorState extends State<HtmlEditor> {
                 _controller = webViewController;
 
                 if (Platform.isAndroid) {
-                  final filename =
-                      'packages/html_editor/editor/editor.html';
+                  final filename = 'packages/html_editor/editor/editor.html';
                   _controller.loadUrl(
                       "file:///android_asset/flutter_assets/" + filename);
                 } else {
@@ -147,15 +147,11 @@ class HtmlEditorState extends State<HtmlEditor> {
               },
             ),
           ),
-          widget.showBottomToolbar
-              ? Divider()
-              : Container(
-                  height: 1,
-                ),
+          widget.showBottomToolbar ? Divider() : Container(height: 1),
           widget.showBottomToolbar
               ? BottomAppBar(
-                child: Center(
-                  child: Padding(
+                  child: Center(
+                    child: Padding(
                       padding: const EdgeInsets.only(
                           left: 4.0, right: 4, bottom: 0.0, top: 5.0),
                       child: Row(
@@ -163,7 +159,8 @@ class HtmlEditorState extends State<HtmlEditor> {
                         children: <Widget>[
                           widgetIcon(Icons.image, "Image", onKlik: () {
                             widget.useBottomSheet
-                                ? bottomSheetPickImage(context, widget.getImageUrl)
+                                ? bottomSheetPickImage(
+                                    context, widget.getImageUrl)
                                 : dialogPickImage(context, widget.getImageUrl);
                           }),
 
@@ -199,11 +196,9 @@ class HtmlEditorState extends State<HtmlEditor> {
                         ],
                       ),
                     ),
-                ),
-              )
-              : Container(
-                  height: 1,
+                  ),
                 )
+              : Container(height: 1)
         ],
       ),
     );
@@ -337,17 +332,14 @@ class HtmlEditorState extends State<HtmlEditor> {
   }
 
   Future pickVideo() async {
-    var image = await ImagePicker.pickVideo(
-      source: ImageSource.gallery,
-    );
+    var image = await ImagePicker.pickVideo(source: ImageSource.gallery);
 
     if (image != null) {
       String videoUrl = await widget.getVideoUrl(image);
-      if(videoUrl != null){
+      if (videoUrl != null) {
         String videoHtml = "<video width=\"${widget.widthImage}\" controls> "
             "<source src=\"$videoUrl\"> </video>";
-        String txt =
-            "\$('.note-editable').append( '" + videoHtml + "');";
+        String txt = "\$('.note-editable').append( '" + videoHtml + "');";
         _controller.evaluateJavascript(txt);
       }
     }
@@ -368,7 +360,7 @@ class HtmlEditorState extends State<HtmlEditor> {
             width: double.infinity,
             child: PickImage(callbackFile: (file) async {
               String imageUrl = await getImageUrl(file);
-              if(imageUrl != null){
+              if (imageUrl != null) {
                 String base64Image = "<img width=\"${widget.widthImage}\" "
                     "src=\"$imageUrl\">";
                 String txt =
