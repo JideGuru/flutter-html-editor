@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   webview_flutter: ^0.3.21
-  image_picker: ^0.6.4
+  image_picker: ^0.7.5+2
   path: ^1.6.4
   mime: ^0.9.6+3
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -94,14 +96,15 @@ class PickImage extends StatelessWidget {
   }
 
   Future getImage(bool isKamera) async {
-    var image = await ImagePicker.pickImage(
+    final picker = ImagePicker();
+    var image = await picker.getImage(
       source: isKamera ? ImageSource.camera : ImageSource.gallery,
       maxWidth: 800.0,
       maxHeight: 600.0,
     );
 
     if (image != null) {
-      callbackFile(image);
+      callbackFile(File(image.path));
     }
   }
 }

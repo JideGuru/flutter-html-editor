@@ -332,10 +332,11 @@ class HtmlEditorState extends State<HtmlEditor> {
   }
 
   Future pickVideo() async {
-    var image = await ImagePicker.pickVideo(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    var image = await picker.getVideo(source: ImageSource.gallery);
 
     if (image != null) {
-      String videoUrl = await widget.getVideoUrl(image);
+      String videoUrl = await widget.getVideoUrl(File(image.path));
       if (videoUrl != null) {
         String videoHtml = "<video width=\"${widget.widthImage}\" controls> "
             "<source src=\"$videoUrl\"> </video>";
